@@ -8,7 +8,7 @@ data class Todo(
     val name: String,
     val description: String,
     val isFinished: Boolean,
-    
+
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0
 )
