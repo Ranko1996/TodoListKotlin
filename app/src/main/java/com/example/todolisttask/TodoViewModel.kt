@@ -1,5 +1,8 @@
 package com.example.todolisttask
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,7 +19,8 @@ class TodoViewModel(
     private val dao: TodoDao
 ) : ViewModel() {
     private val _sortType = MutableStateFlow(SortType.IS_FINISHED_FALSE)
-
+    var selectedTodo by mutableStateOf<Todo?>(null)
+        private set
     private val _todos = _sortType
         .flatMapLatest { sortType ->
             when (sortType) {
@@ -53,6 +57,7 @@ class TodoViewModel(
                     )
                 }
             }
+
 
             TodoEvent.SaveTodo -> {
 
@@ -94,11 +99,22 @@ class TodoViewModel(
                 }
             }
 
+//            is TodoEvent.SetStatus -> {
+//                _state.update {
+//                    it.copy(isFinished = event.isFinished)
+//                }
+//            }
             is TodoEvent.SetStatus -> {
-                _state.update {
-                    it.copy(isFinished = event.isFinished)
+                viewModelScope.launch {
+                    state.value.selectedTodo?.let { selectedTodo ->
+                        dao.updateTodoStatus(selectedTodo.id, event.isFinished)
+                        _state.update {
+                            it.copy(isFinished = event.isFinished)
+                        }
+                    }
                 }
             }
+
 
             TodoEvent.ShowDialog -> {
                 _state.update {
@@ -109,6 +125,29 @@ class TodoViewModel(
             is TodoEvent.SortTodos -> {
                 _sortType.value = event.sortType
             }
+
+            is TodoEvent.ShowDetails -> {
+//                selectedTodo = event.todo
+                println("Before state: $_state")
+                _state.update {
+                    it.copy(
+                        selectedTodo = event.todo,
+                        isSingleTodoView = true
+                    )
+                }
+
+            }
+
+            is TodoEvent.HideDetailsDialog -> {
+                _state.update {
+                    it.copy(
+                        selectedTodo = null,
+                        isSingleTodoView = false,
+                    )
+                }
+            }
+
+
         }
     }
 }

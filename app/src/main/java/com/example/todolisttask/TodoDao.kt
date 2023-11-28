@@ -3,6 +3,7 @@ package com.example.todolisttask
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
+import androidx.room.Update
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
@@ -24,5 +25,6 @@ interface TodoDao {
     @Query("SELECT * FROM todo WHERE isFinished = 0 ORDER BY name ASC")
     fun getUnfinishedTodos(): Flow<List<Todo>>
 
-
+    @Query("UPDATE todo SET isFinished = :isFinished WHERE id = :todoId")
+    suspend fun updateTodoStatus(todoId: Int, isFinished: Boolean)
 }
