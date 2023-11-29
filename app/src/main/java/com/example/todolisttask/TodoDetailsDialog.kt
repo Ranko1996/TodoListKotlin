@@ -24,7 +24,6 @@ import com.example.todolisttask.Todo
 import com.example.todolisttask.TodoEvent
 import com.example.todolisttask.TodoState
 
-
 @Composable
 fun TodoDetailsDialog(
     todo: Todo,
@@ -35,14 +34,28 @@ fun TodoDetailsDialog(
     AlertDialog(
         modifier = modifier,
         onDismissRequest = { onEvent(TodoEvent.HideDetailsDialog) },
-        title = { Text(text = "Todo Details") },
+        title = {
+            Text(
+                text = "Todo Details",
+                fontSize = 24.sp, // Povećajte veličinu fonta prema vašim željama
+                fontWeight = FontWeight.Bold
+            )
+        },
         text = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(text = "Name: ${todo.name}")
+                Text(
+                    text = "Name: ${todo.name}",
+                    fontSize = 18.sp, // Povećajte veličinu fonta prema vašim željama
+                    fontWeight = FontWeight.Bold
+                )
                 Text(text = "Description: ${todo.description}")
-                Text(text = "Status: ${if (todo.isFinished) "Done" else "Not Done"}")
+                Text(
+                    text = "Status: ${if (todo.isFinished) "Done" else "Not Done"}",
+                    fontSize = 16.sp, // Povećajte veličinu fonta prema vašim željama
+                    fontWeight = FontWeight.Bold
+                )
                 // Dodajte ostale informacije koje želite prikazati o zadatku
             }
         },

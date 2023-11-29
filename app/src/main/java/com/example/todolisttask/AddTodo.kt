@@ -16,7 +16,10 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun AddTodoDialog(
@@ -27,7 +30,13 @@ fun AddTodoDialog(
     AlertDialog(
         modifier = modifier,
         onDismissRequest = { onEvent(TodoEvent.HideTodoDialog) },
-        title = { Text(text = "Add todo") },
+        title = {
+            Text(
+                text = "Add Todo",
+                fontSize = 24.sp, // Povećajte veličinu fonta prema vašim željama
+                fontWeight = FontWeight.Bold
+            )
+        },
         text = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -35,47 +44,47 @@ fun AddTodoDialog(
                 TextField(
                     value = state.name,
                     onValueChange = { onEvent(TodoEvent.SetName(it)) },
-                    placeholder = { Text(text = "Todo Name") }
+                    placeholder = {
+                        Text(
+                            text = "Todo Name",
+                            color = Color.Gray, // Dodano sivo bojenje teksta placeholdera
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
                 )
                 TextField(
                     value = state.description,
                     onValueChange = { onEvent(TodoEvent.SetDescription(it)) },
-                    placeholder = { Text(text = "Todo Description") }
+                    placeholder = {
+                        Text(
+                            text = "Todo Description",
+                            color = Color.Gray, // Dodano sivo bojenje teksta placeholdera
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
                 )
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    verticalAlignment = Alignment.CenterVertically
-//                )
-//                {
-//                    Text(text = "Status:")
-//                    Spacer(modifier = Modifier.width(8.dp))
-//                    RadioButton(
-//                        selected = state.isFinished,
-//                        onClick = { onEvent(TodoEvent.(!state.isFinished)) }
-//                    )
-//                    Text(text = "Done")
-//                }
             }
         },
         buttons = {
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(8.dp),
-//                horizontalArrangement = Arrangement.End
-//            ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth().padding(8.dp),
-                    contentAlignment = Alignment.CenterEnd
-                ) {
-                    Button(onClick = {
-                        onEvent(TodoEvent.SaveTodo)
-                    }) {
-                        Text(text = "Save")
-                    }
+
+            Box(
+                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Button(onClick = {
+                    onEvent(TodoEvent.SaveTodo)
+                }) {
+                    Text(text = "Save")
+                }
 //                }
             }
 
         }
     )
 }
+
+
