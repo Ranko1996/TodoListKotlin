@@ -1,16 +1,19 @@
 package com.example.todolisttask
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,8 +35,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.lazy.LazyColumn as LazyColumn1
 
 @Composable
 fun TodoScreen(
@@ -51,7 +57,7 @@ fun TodoScreen(
             AddTodoDialog(state = state, onEvent = onEvent)
         }
 
-        LazyColumn(
+        LazyColumn1(
             contentPadding = PaddingValues(16.dp),
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -69,98 +75,80 @@ fun TodoScreen(
                                 onEvent(TodoEvent.SortTodos(sortType))
                             },
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = if (state.sortType == sortType) Color(0xFF6200EE) else Color(
-                                    0xFFE0E0E0
-                                ),
-                                contentColor = if (state.sortType == sortType) Color.White else Color(
-                                    0xFF000000
-                                )
+                                backgroundColor = if (state.sortType == sortType) Color.White else Color.Transparent,
+                                contentColor = if (state.sortType == sortType) Color(0xFF6200EE) else Color(0xFF000000)
                             ),
                             shape = RoundedCornerShape(50),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(4.dp)
+                                .padding(4.dp),
+                            border = BorderStroke(
+                                2.dp,
+                                if (state.sortType == sortType) Color(0xFF6200EE) else Color(
+                                    0xFFE0E0E0
+                                )
+                            )
                         ) {
-                            Text(text = sortType.name)
+                            Text(
+                                text = sortType.name,
+                                fontSize = 15.sp,
+                                fontWeight = if (state.sortType == sortType) FontWeight.Bold else FontWeight.Normal,
+                                color = if (state.sortType == sortType) Color(0xFF6200EE) else Color(0xFF000000)
+                            )
                         }
                     }
 
-                    // Postavke za sortiranje, ako ih ima
-//                    SortType.values().forEach { sortType ->
-//                        Row(
-//                            modifier = Modifier.clickable {
-//                                onEvent(TodoEvent.SortTodos(sortType))
-//                            },
-//                            verticalAlignment = CenterVertically
-//                        ) {
-//                            RadioButton(
-//                                selected = state.sortType == sortType,
-//                                onClick = {
-//                                    onEvent(TodoEvent.SortTodos(sortType))
-//                                }
-//                            )
-//                            Text(text = sortType.name)
-//                        }
-//                    }
+
+
                 }
             }
-            items(state.todos) { todo ->
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        onEvent(TodoEvent.ShowDetails(todo))
-                    }) {
 
-//                    Checkbox(
-//                        checked = todo.isFinished,
-//                        onCheckedChange = { isChecked ->
-//                            onEvent(TodoEvent.SetStatus(isChecked))
-//                        },
-//                        modifier = Modifier.padding(2.dp)
-//                    )
-
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                items(state.todos) { todo ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onEvent(TodoEvent.ShowDetails(todo)) }
+                            .padding(2.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = todo.name, fontSize = 20.sp)
-//                        Text(text = todo.description, fontSize = 12.sp)
-                        //Vidjeti za ovo dal radi
-                        Text(
-                            text = if (todo.isFinished) "Done" else "Not Done",
-                            fontSize = 12.sp,
-                            color = if (todo.isFinished) androidx.compose.ui.graphics.Color.Green else androidx.compose.ui.graphics.Color.Red
-                        )
-//                        Text(
-//                            text = "Show Details",
-//                            color = Color.Blue,
-//                            modifier = Modifier.clickable {
-//                                onEvent(TodoEvent.ShowDetails(todo))
-////                                 onEvent(TodoEvent.ShowDialog)
-////                                onEvent(TodoEvent.ShowDetails)
-////                                FloatingActionButton(onClick = { onEvent(TodoEvent.ShowDialog) }) {
-//                            }
-//                        )
-                    }
-                    Checkbox(
-                        checked = todo.isFinished,
-                        onCheckedChange = { isChecked ->
-                            onEvent(TodoEvent.SetStatus(isChecked, todo.id))
-                        },
-                        modifier = Modifier.padding(2.dp)
-                    )
 
-                    IconButton(onClick = {
-                        onEvent(TodoEvent.DeleteTodo(todo))
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-//                            colorResource(id = )
-                            contentDescription = "Delete todo"
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(end = 10.dp, top = 4.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Text(
+                                text = todo.name,
+                                fontSize = 20.sp,
+                                textDecoration = if (todo.isFinished) TextDecoration.LineThrough else TextDecoration.None,
+                                color = if (todo.isFinished) Color.Gray else Color.Black
+                            )
+                        }
+
+                        Checkbox(
+                            checked = todo.isFinished,
+                            onCheckedChange = { isChecked ->
+                                onEvent(TodoEvent.SetStatus(isChecked, todo.id))
+                            },
+                            modifier = Modifier.padding(2.dp)
                         )
+
+                        IconButton(
+                            onClick = { onEvent(TodoEvent.DeleteTodo(todo)) },
+                            modifier = Modifier.size(24.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete todo"
+                            )
+                        }
                     }
+
                 }
-            }
+
+
+
         }
         if (state.isSingleTodoView) {
             if (state.selectedTodo != null)
