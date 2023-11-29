@@ -22,9 +22,11 @@ interface TodoDao {
     @Query("SELECT * FROM todo WHERE isFinished = 1 ORDER BY name ASC")
     fun getFinishedTodos(): Flow<List<Todo>>
 
-    @Query("SELECT * FROM todo WHERE isFinished = 0 ORDER BY name ASC")
-    fun getUnfinishedTodos(): Flow<List<Todo>>
-
+    //    suspend fun updateTodoStatus(todoId: Int)
+//    @Query("UPDATE todo SET isFinished = 0 WHERE id = :todoId")
     @Query("UPDATE todo SET isFinished = :isFinished WHERE id = :todoId")
     suspend fun updateTodoStatus(todoId: Int, isFinished: Boolean)
+
+    @Query("SELECT * FROM todo WHERE isFinished = 0 ORDER BY name ASC")
+    fun getUnfinishedTodos(): Flow<List<Todo>>
 }

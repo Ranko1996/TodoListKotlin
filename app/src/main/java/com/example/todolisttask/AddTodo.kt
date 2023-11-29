@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
@@ -57,16 +58,24 @@ fun AddTodoDialog(
             }
         },
         buttons = {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                Button(onClick = {
-                    onEvent(TodoEvent.SaveTodo)
-                }) {
-                    Text(text = "Save")
-                }
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(8.dp),
+//                horizontalArrangement = Arrangement.End
+//            ) {
+                Box(
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    Button(onClick = {
+                        onEvent(TodoEvent.SaveTodo)
+                    }) {
+                        Text(text = "Save")
+                    }
+//                }
             }
+
         }
     )
 }

@@ -1,4 +1,4 @@
-package com.example.todolisttask.ui
+package com.example.todolisttask
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

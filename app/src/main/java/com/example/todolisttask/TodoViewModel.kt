@@ -1,5 +1,6 @@
 package com.example.todolisttask
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -43,12 +44,53 @@ class TodoViewModel(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TodoState())
 
     fun onEvent(event: TodoEvent) {
+//        println("onEvent u onEvent u todo vju modelucalled with event: $event")
         when (event) {
             is TodoEvent.DeleteTodo -> {
                 viewModelScope.launch {
                     dao.deleteTodo(event.todo)
                 }
             }
+
+            is TodoEvent.SetStatus -> {
+                viewModelScope.launch {
+                    try {
+
+
+                        dao.updateTodoStatus(event.todoId, event.isFinished)
+
+                        _state.update {
+                            val updatedState = it.copy(isFinished = event.isFinished)
+                            updatedState
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Log.e("TodoApp", "Exception in SetStatus: $e")
+                    }
+                }
+            }
+
+
+//            is TodoEvent.SetStatus -> {
+//                println("Ovo printa");
+//                viewModelScope.launch {
+//                    println("I ovo printa");
+//                    println("Selected Todo ID: ${selectedTodo}")
+//                    state.value.selectedTodo?.let { selectedTodo ->
+//                        println("U METODI SET STATUESA jos nize");
+//                        dao.updateTodoStatus(selectedTodo.id, event.isFinished)
+//                        _state.update {
+//                            println("U METODI SET STATUESA dje treba");
+//                            val updatedState = it.copy(isFinished = event.isFinished)
+//                            println("Updated _state: $updatedState")
+//                            Log.d("TodoApp", "Updated _state: $updatedState")
+//                            updatedState
+//                        }
+//                        Log.d("TodoApp", "Updated isFinished to: ${event.isFinished}")
+//                        println("Updated isFinished to: ${event.isFinished}")
+//                    }
+//                }
+//            }
 
             TodoEvent.HideTodoDialog -> {
                 _state.update {
@@ -104,16 +146,32 @@ class TodoViewModel(
 //                    it.copy(isFinished = event.isFinished)
 //                }
 //            }
-            is TodoEvent.SetStatus -> {
-                viewModelScope.launch {
-                    state.value.selectedTodo?.let { selectedTodo ->
-                        dao.updateTodoStatus(selectedTodo.id, event.isFinished)
-                        _state.update {
-                            it.copy(isFinished = event.isFinished)
-                        }
-                    }
-                }
-            }
+
+
+//            is TodoEvent.SetStatus -> {
+//                viewModelScope.launch {
+//                    state.value.selectedTodo?.let { selectedTodo ->
+//                        dao.updateTodoStatus(selectedTodo.id, event.isFinished)
+//                        _state.update {
+//                            val updatedState = it.copy(isFinished = event.isFinished)
+//                            println("Updated _state: $updatedState")
+//                            Log.d("TodoApp", "Updated _state: $updatedState")
+//                            updatedState
+//                            it.copy(isFinished = event.isFinished)
+//                        }
+//                        Log.d("TodoApp", "Updated isFinished to: ${event.isFinished}")
+//                        println("Updated isFinished to: ${event.isFinished}")
+//                    }
+//                }
+//            }
+//            is TodoEvent.SetStatus -> {
+//                viewModelScope.launch {
+//                    state.value.selectedTodo?.let { selectedTodo ->
+//                        dao.updateTodoStatus(selectedTodo.id, event.isFinished)
+////                        dao.updateTodoStatus(selectedTodo.id)
+//                    }
+//                }
+//            }
 
 
             TodoEvent.ShowDialog -> {
