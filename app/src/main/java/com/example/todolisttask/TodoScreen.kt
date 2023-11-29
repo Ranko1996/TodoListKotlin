@@ -80,7 +80,9 @@ fun TodoScreen(
                 }
             }
             items(state.todos) { todo ->
-                Row(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier.fillMaxWidth().clickable {
+                    onEvent(TodoEvent.ShowDetails(todo))
+                }) {
 
 //                    Checkbox(
 //                        checked = todo.isFinished,
@@ -102,16 +104,16 @@ fun TodoScreen(
                             fontSize = 12.sp,
                             color = if (todo.isFinished) androidx.compose.ui.graphics.Color.Green else androidx.compose.ui.graphics.Color.Red
                         )
-                        Text(
-                            text = "Show Details",
-                            color = Color.Blue,
-                            modifier = Modifier.clickable {
-                                onEvent(TodoEvent.ShowDetails(todo))
-//                                 onEvent(TodoEvent.ShowDialog)
-//                                onEvent(TodoEvent.ShowDetails)
-//                                FloatingActionButton(onClick = { onEvent(TodoEvent.ShowDialog) }) {
-                            }
-                        )
+//                        Text(
+//                            text = "Show Details",
+//                            color = Color.Blue,
+//                            modifier = Modifier.clickable {
+//                                onEvent(TodoEvent.ShowDetails(todo))
+////                                 onEvent(TodoEvent.ShowDialog)
+////                                onEvent(TodoEvent.ShowDetails)
+////                                FloatingActionButton(onClick = { onEvent(TodoEvent.ShowDialog) }) {
+//                            }
+//                        )
                     }
 
                     IconButton(onClick = {
