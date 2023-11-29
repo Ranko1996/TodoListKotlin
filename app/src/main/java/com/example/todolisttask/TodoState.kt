@@ -7,7 +7,7 @@ data class TodoState(
     val isFinished: Boolean = false,
     val isAddingTodo: Boolean = false,
 //    val singleTodoView: Boolean = false,
-    val sortType: SortType = SortType.IS_FINISHED_FALSE,
+    val sortType: SortType = SortType.ALL,
     val selectedTodo: Todo? = null,
     val isSingleTodoView: Boolean = false
 )

@@ -19,14 +19,15 @@ import kotlinx.coroutines.launch
 class TodoViewModel(
     private val dao: TodoDao
 ) : ViewModel() {
-    private val _sortType = MutableStateFlow(SortType.IS_FINISHED_FALSE)
+    private val _sortType = MutableStateFlow(SortType.ALL)
     var selectedTodo by mutableStateOf<Todo?>(null)
         private set
     private val _todos = _sortType
         .flatMapLatest { sortType ->
             when (sortType) {
-                SortType.IS_FINISHED_TRUE -> dao.getFinishedTodos()
-                SortType.IS_FINISHED_FALSE -> dao.getUnfinishedTodos()
+                SortType.FINISHED -> dao.getFinishedTodos()
+                SortType.UNFINISHED -> dao.getUnfinishedTodos()
+                SortType.ALL -> dao.getTodos()
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
@@ -70,27 +71,6 @@ class TodoViewModel(
                 }
             }
 
-
-//            is TodoEvent.SetStatus -> {
-//                println("Ovo printa");
-//                viewModelScope.launch {
-//                    println("I ovo printa");
-//                    println("Selected Todo ID: ${selectedTodo}")
-//                    state.value.selectedTodo?.let { selectedTodo ->
-//                        println("U METODI SET STATUESA jos nize");
-//                        dao.updateTodoStatus(selectedTodo.id, event.isFinished)
-//                        _state.update {
-//                            println("U METODI SET STATUESA dje treba");
-//                            val updatedState = it.copy(isFinished = event.isFinished)
-//                            println("Updated _state: $updatedState")
-//                            Log.d("TodoApp", "Updated _state: $updatedState")
-//                            updatedState
-//                        }
-//                        Log.d("TodoApp", "Updated isFinished to: ${event.isFinished}")
-//                        println("Updated isFinished to: ${event.isFinished}")
-//                    }
-//                }
-//            }
 
             TodoEvent.HideTodoDialog -> {
                 _state.update {
